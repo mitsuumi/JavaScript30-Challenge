@@ -1,0 +1,62 @@
+html {
+    font-size: 10px;
+    background: url('./background.jpg') bottom center;
+    background-size: cover;
+}
+
+body, html{
+    margin:0;
+    padding:0;
+    font-family: sans-serif;
+}
+
+.keys{
+    /* 需要再看一次flex */
+    display: flex;
+    flex:1;
+    /* vh是view height，是螢幕可視範圍高度的百分比，100vh意思是整個螢幕的可視範圍，此區快會隨著瀏覽器的縮放而改變 */
+    min-height: 100vh;
+    justify-content: center;
+    align-items:center;
+}
+
+
+.key{
+    border: 4px solid black;
+    border-radius: 5px;
+    /* 相對單位，每個子元素透過「倍數」乘以父元素的 px 值。 */
+    /* 這邊的margin為html設定中的font-size的 10px * 1=10px */
+    margin:1rem;
+    font-size: 1.5rem;
+    padding: 1rem .5rem;
+    /* transition需要事件觸發
+    常用於滑鼠事件（:hover、:active、:focus、click）或鍵盤輸入時觸發 
+    是一次性的，不能重複發生，除非再次觸發
+    只能定義開始、結束狀態，無法定義中間狀態
+    */
+    transition: all 0.07s;
+    width: 100px;
+    text-align: center;
+    color: white;
+    background: rgba(0,0,0,0.4);
+    text-shadow: 0 0 5px black;
+}
+
+.playing{
+    transform:scale(1.1);
+    border-color: #ffc600;
+    box-shadow: 0 0 10px #ffc600;
+}
+
+kbd {
+    display: block;
+    font-size: 4rem;
+  }
+  
+.sound {
+    font-size: 1.2rem;
+    /* text-transform 控制字母大小寫，uppercase控制字母全大寫 */
+    text-transform: uppercase;
+    letter-spacing: .1rem;
+    color: #ffc600;
+  }
