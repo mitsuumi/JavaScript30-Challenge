@@ -10,12 +10,77 @@
   <form class="search-form">
     <input type="text" class="search" placeholder="City or State">
     <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
+      <!-- <li>Filter for a city</li>
+      <li>or a state</li> -->
     </ul>
   </form>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js" integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+
+const cities = [];
+
+// axios.get(endpoint)
+//   .then(res=>{
+//     const data = res.data
+//     console.log(data)
+//   })
+
+// fetch()api 回傳promise，需要用.then()接住資料
+fetch(endpoint,{
+})
+// blog.json()會返回另一個promise，要用then再去接要得到的數值
+  .then(blog => blog.json())
+  // get each item to go into cities
+  // ...data表示將data資料
+  .then(data => cities.push(...data))
+
+// match() 方法可以在字串內檢索指定的值，回傳符合的字串，否則回傳null
+// 類似indexOf()，不過match()是返回符合的字串，而indexOf()是返回該字串的索引值
+// 可以搭配正規表達式使用
+function findMatches(wordToMatch, cities) {
+  return cities.filter(place => {
+    //figure out if the city or state matches what was searched
+    // 正規表達式中gi代表全文查找出現的所有匹配字串(g)，忽略大小寫(i)
+    const regex = new RegExp(wordToMatch, 'gi');
+    return place.city.match(regex) || place.state.match(regex)
+  })
+}
+function numberWithCommas(x){
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',')
+}
+
+function displayMatches(){
+  const matchArray = findMatches(this.value, cities)
+  // 將有符合的陣列，回傳為html的字串
+  const html = matchArray.map(place => {
+    // 搜尋到的字詞要顯示顏色
+    const regex = new RegExp(this.value, 'gi')
+    // 替換成有hl的class
+    const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`)
+    const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`)
+    return `
+      <li>
+        <span class="name">${cityName}, ${stateName}</span>
+        <span class="population">${numberWithCommas(place.population)}</span>
+      </li>
+    `
+  }).sort().join(''); //可以將返回的array，變成一個大字串
+  // console.log(html)
+  // 顯示在畫面上
+  suggestions.innerHTML = html
+}
+
+
+
+const searchInput = document.querySelector('.search')
+const suggestions = document.querySelector('.suggestions')
+
+// 當input的數值有改變時，呼叫displayMatches()
+// change只會在沒使用input時，才會發動。如果要每次輸入都要監聽，可以使用keyup
+searchInput.addEventListener('change', displayMatches)
+searchInput.addEventListener('keyup', displayMatches)
 
 </script>
 </body>
