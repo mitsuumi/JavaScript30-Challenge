@@ -21,6 +21,7 @@ const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb
 
 const cities = [];
 
+// axios可以自動將資料轉成JSON格式
 // axios.get(endpoint)
 //   .then(res=>{
 //     const data = res.data
@@ -28,6 +29,7 @@ const cities = [];
 //   })
 
 // fetch()api 回傳promise，需要用.then()接住資料
+// fetch()需要先將資料轉成JSON格式才可以then下去
 fetch(endpoint,{
 })
 // blog.json()會返回另一個promise，要用then再去接要得到的數值
@@ -48,6 +50,8 @@ function findMatches(wordToMatch, cities) {
   })
 }
 function numberWithCommas(x){
+  // ?=(\d{3}) 取出3位數字出來
+  // +(?!\d) 該3位數字後面接著飛數字的字元
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',')
 }
 
