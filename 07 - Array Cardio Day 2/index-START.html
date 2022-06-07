@@ -75,7 +75,7 @@
     ]
     console.log('newComments:', newComments)
 
-    //單純的物件或是陣列用展開，可以是深拷貝
+    //展開是淺拷貝，只能複製第一層，但第二層資料會無法達到實際的複製
     let list = [1,2,3,4,5]
     let listCopy = [...list]
     listCopy[0] = 5
@@ -87,7 +87,7 @@
     fightCopy[0].fight = '衝啊';
     console.log(fight)  // [{fight: '衝啊'}]
     console.log(fightCopy) // [{fight: '衝啊'}]
-    
+
     // 用JSON.stringify(list)變成JSON字串，再用JSON.parse()把JSON字串生成為JSON物件，已獲得新的物件
 
 
