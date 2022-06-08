@@ -3,17 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <title>HTML5 Canvas</title>
+  <style>
+    html, body {
+      margin: 0;
+    }
+  </style>
 </head>
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
+
 <script>
+  // 建置繪圖環境
+  const canvas = document.querySelector('#draw');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  // 線條顏色
+  ctx.strokeStyle = '#BADA55';
+  // 線條連接樣式(轉角), 有round, bevel, miter三種
+  ctx.lineJoin= 'round';
+  // 線條結束樣式，有round, butt, square三種
+  ctx.lineCap = 'round';
+  // ctx.globalCompositeOperation = 'source-over';
+
+  // 判斷是否正在繪圖
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+  // 色相值，要在hsl中使用
+  let hue = 0;
+  // 判斷線條行進時的粗細
+  let direction = true;
+  ctx.lineWidth = 100;
+
+  function draw(e){
+    // 如果沒有isDrawing，就不使用此function
+    if(!isDrawing) return; //stop the fn from running when they are not moused down
+    console.log(e)
+
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`
+    // 建立一條新路徑
+    ctx.beginPath();
+    // start from，將路徑前往至(lastX, lastY)
+    ctx.moveTo(lastX, lastY);
+    // goto 將起始點與目前滑鼠位置連接起來
+    ctx.lineTo(e.offsetX, e.offsetY);
+    // 繪製線條
+    ctx.stroke();
+    // lastX = e.offsetX, lastY = e.offsetY
+    [lastX, lastY] = [e.offsetX, e.offsetY]
+    hue++;
+    if(hue>360){
+      hue = 0;
+    }
+    if(ctx.lineWidth >= 100 || ctx.lineWidth <=1){
+      direction = !direction;
+    }
+    if(direction){
+      ctx.lineWidth ++;
+    } else {
+      ctx.lineWidth--;
+    }
+    
+
+  }
+
+
+
+  canvas.addEventListener('mousedown',(e)=> {
+    isDrawing=true;
+    [lastX, lastY] = [e.offsetX, e.offsetY]
+  
+  })
+
+  canvas.addEventListener('mousemove',draw)
+  canvas.addEventListener('mousedown',()=> isDrawing=true)
+  canvas.addEventListener('mouseup',()=> isDrawing=false)
+  canvas.addEventListener('mouseout',()=> isDrawing=false)
+
 </script>
 
-<style>
-  html, body {
-    margin: 0;
-  }
-</style>
+
 
 </body>
 </html>
