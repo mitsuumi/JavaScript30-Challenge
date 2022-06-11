@@ -7,6 +7,29 @@
 </head>
 <body>
 <script>
+  const pressed = []
+  const secretCode = 'wesbos'
+  // 顯示鍵盤按下去的英文符號
+  window.addEventListener('keyup',(e)=>{
+    console.log(e.key)
+    pressed.push(e.key)
+    // Array.prototype.spice(start, deleteCount, item1, item2....)
+    // deleteCount 參數如果是負值不會有反應
+    // 讓pressed長度控制在和secretCode一樣
+    // -secretCode.length - 1 也可以寫-secretCode.length或是0才對，不確定作者的用意
+    pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length)
+    // 判斷輸入值陣列是否與設定密碼相同
+    // 每次相同就呼叫
+    // 利用Array.prototype.join()方式將陣列改為字串
+    // 利用String.prototype.includes()方式比對內容是否有在array出現
+    // includes會區分大小寫
+    // .includes和.match的差異是，.match會回傳符合該字串的陣列，.includes則是回傳true or false
+    if(pressed.join('').includes(secretCode)){
+      console.log('Ding Ding')
+      cornify_add();
+    }
+    console.log(pressed)
+  })
 </script>
 </body>
 </html>
