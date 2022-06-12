@@ -43,6 +43,7 @@
   </div>
 
   <script>
+    // 因為用scroll來監聽，每次畫面滾動都會有大量事件觸發，會對效能造成影響，因此作者寫了debounce函式來使觸發間隔為20毫秒以上
     function debounce(func, wait = 20, immediate = true) {
       var timeout;
       return function() {
@@ -52,12 +53,40 @@
           if (!immediate) func.apply(context, args);
         };
         var callNow = immediate && !timeout;
+        
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
       };
     }
 
+    const sliderImages = document.querySelectorAll('.slide-in')
+  
+
+    function checkSlide(e){
+      // window.pageYOffset 和 window.scrollY 功能一樣，為卷軸滾動到的像素值
+      // 跨瀏覽器兼容上，window.pageYOffset 的相容性比 window.scrollY 好
+      sliderImages.forEach(sliderImage => {
+        // window.innerHeight 為瀏覽器視窗的高度，若有出現卷軸，則包含卷軸高度
+        //  圖片顯示 1/2 時的定位點
+        const sliderInAt = (window.pageYOffset  + window.innerHeight) - (sliderImage.height / 2)
+        // 告訴我們圖片距離最上方有多遠
+        //  圖片底部的位置
+        const imageBottom = sliderImage.offsetTop + sliderImage.height
+        // 判斷滾動的視窗是否超過圖片頂端
+        const isHalfShown = sliderInAt > sliderImage.offsetTop
+         // 判斷滾動範圍是否低於圖片的底部
+        const isNotScrolledPast = window.scrollY < imageBottom;
+        // 當滾動超過圖片頂端 且 尚未超過圖片底部的位置，增加css屬性
+        if(isHalfShown && isNotScrolledPast){
+          sliderImage.classList.add('active')
+        } else {
+          sliderImage.classList.remove('active')
+        }
+      })
+    }
+
+    window.addEventListener('scroll',debounce(checkSlide))
   </script>
 
   <style>
